@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<title>Game Tebak Angka Retro</title>
+<style>
+body {
+    background-color: black;
+    color: #00ff00;
+    font-family: "Courier New", monospace;
+    text-align: center;
+    padding-top: 50px;
+}
+
+.container {
+    border: 3px solid #00ff00;
+    display: inline-block;
+    padding: 20px;
+    box-shadow: 0 0 20px #00ff00;
+}
+
+h1 {
+    text-shadow: 0 0 10px #00ff00;
+}
+
+input {
+    background: black;
+    border: 2px solid #00ff00;
+    color: #00ff00;
+    padding: 10px;
+    font-size: 16px;
+    text-align: center;
+}
+
+button {
+    background: black;
+    border: 2px solid #00ff00;
+    color: #00ff00;
+    padding: 10px 20px;
+    margin-top: 10px;
+    cursor: pointer;
+}
+
+button:hover {
+    background: #00ff00;
+    color: black;
+}
+
+#result {
+    margin-top: 15px;
+    font-size: 18px;
+}
+</style>
+</head>
+
+<body>
+
+<div class="container">
+    <h1>🎮 Tebak Angka</h1>
+    <p>Tebak angka dari 1 - 100</p>
+
+    <input type="number" id="guess" placeholder="Masukkan angka">
+    <br>
+    <button onclick="checkGuess()">Tebak</button>
+
+    <p id="result"></p>
+    <p>🏆 Score: <span id="score">100</span></p>
+</div>
+
+<!-- SOUND -->
+<audio id="winSound" src="https://www.soundjay.com/buttons/sounds/button-4.mp3"></audio>
+<audio id="wrongSound" src="https://www.soundjay.com/buttons/sounds/button-10.mp3"></audio>
+
+<script>
+let angkaRahasia = Math.floor(Math.random() * 100) + 1;
+let score = 100;
+
+function checkGuess() {
+    let guess = document.getElementById("guess").value;
+    let result = document.getElementById("result");
+    let scoreDisplay = document.getElementById("score");
+
+    if (guess == "") {
+        result.innerText = "Masukkan angka dulu!";
+        return;
+    }
+
+    guess = Number(guess);
+
+    if (guess === angkaRahasia) {
+        document.getElementById("winSound").play();
+        result.innerText = "🔥 Benar! Kamu menang!";
+        
+        setTimeout(() => {
+            alert("Game di reset!");
+            resetGame();
+        }, 1000);
+
+    } else {
+        document.getElementById("wrongSound").play();
+        score -= 10;
+        scoreDisplay.innerText = score;
+
+        if (score <= 0) {
+            result.innerText = "💀 Game Over!";
+            setTimeout(() => {
+                resetGame();
+            }, 1000);
+            return;
+        }
+
+        if (guess < angkaRahasia) {
+            result.innerText = "📉 Terlalu kecil!";
+        } else {
+            result.innerText = "📈 Terlalu besar!";
+        }
+    }
+}
+
+function resetGame() {
+    angkaRahasia = Math.floor(Math.random() * 100) + 1;
+    score = 100;
+    document.getElementById("score").innerText = score;
+    document.getElementById("result").innerText = "";
+    document.getElementById("guess").value = "";
+}
+</script>
+
+</body>
+</html>
